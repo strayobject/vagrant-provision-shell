@@ -14,3 +14,5 @@ sudo apt-get update
  
 # Install the Rest
 sudo apt-get install -y nodejs 
+#curl https://npmjs.org/install.sh | sudo clean=no sh install.sh
+wget https://www.npmjs.org/install.sh && sudo clean=no sh install.sh

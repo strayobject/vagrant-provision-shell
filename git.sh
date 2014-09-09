@@ -1,5 +1,7 @@
 echo ">>> Installing Git"
-sudo apt-get install -y git-core
+sudo add-apt-repository -y ppa:git-core/ppa
+sudo apt-get update
+sudo apt-get install -y git git-core git-man
 
 # Git Config and set Owner
 echo "[user]" >> /home/vagrant/.gitconfig
