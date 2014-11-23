@@ -3,10 +3,27 @@ echo ">>> Configuring Server"
 # Apache Config
 
 sudo echo "<VirtualHost *:80>
-    DocumentRoot \"/var/www/mizzenlite\"
+    DocumentRoot \"/var/www/mizzenlite/mizzenlite\"
+    ServerName dev.mizzenlite-test.net
+    ErrorLog \"/var/log/apache2/error-mizzenlitetest.log\"
+    <Directory /var/www/mizzenlite/mizzenlite/>
+        <IfModule mod_rewrite.c>
+            RewriteEngine on
+#            RewriteRule  (.*) public/index.php [L]
+        </IfModule>
+
+        # Prevent file browsing
+        Options -Indexes
+        AllowOverride all
+    </Directory>
+
+</VirtualHost>" >> /etc/apache2/sites-available/mizzenlitetest.conf
+
+sudo echo "<VirtualHost *:80>
+    DocumentRoot \"/var/www/mizzenlite/site\"
     ServerName dev.mizzenlite.net
     ErrorLog \"/var/log/apache2/error-mizzenlite.log\"
-    <Directory /var/www/mizzenlite>
+    <Directory /var/www/mizzenlite/site/>
         <IfModule mod_rewrite.c>
             RewriteEngine on
 #            RewriteRule  (.*) public/index.php [L]
@@ -19,63 +36,45 @@ sudo echo "<VirtualHost *:80>
 
 </VirtualHost>" >> /etc/apache2/sites-available/mizzenlite.conf
 
-sudo echo "<VirtualHost *:80>
-    DocumentRoot \"/var/www/plainmotif\"
-    ServerName dev.plainmotif.net
-    ErrorLog \"/var/log/apache2/error-plainmotif.log\"
-    <Directory /var/www/plainmotif>
-        <IfModule mod_rewrite.c>
-            RewriteEngine on
-#            RewriteRule  (.*) public/index.php [L]
-        </IfModule>
-
-        # Prevent file browsing
-        Options -Indexes
-        AllowOverride all
-    </Directory>
-
-</VirtualHost>" >> /etc/apache2/sites-available/plainmotif.conf
-
-sudo echo "<VirtualHost *:80>
-    DocumentRoot \"/var/www/glasgowphp\"
-    ServerName dev.glasgowphp.net
-    ErrorLog \"/var/log/apache2/error-glasgowphp.log\"
-    <Directory /var/www/glasgowphp>
-        <IfModule mod_rewrite.c>
-            RewriteEngine on
-#            RewriteRule  (.*) public/index.php [L]
-        </IfModule>
-
-        # Prevent file browsing
-        Options -Indexes
-        AllowOverride all
-    </Directory>
-
-</VirtualHost>" >> /etc/apache2/sites-available/glasgowphp.conf
-
-if [ ! -d /home/vagrant/www/glasgowphp ];
-then
-    mkdir /home/vagrant/www/glasgowphp
-fi
-
 if [ ! -d /home/vagrant/www/mizzenlite ];
 then
     mkdir /home/vagrant/www/mizzenlite
 fi
 
-if [ ! -d /home/vagrant/www/plainmotif ];
+if [ ! -d /home/vagrant/www/mizzenlite/mizzenlite ];
 then
-    mkdir /home/vagrant/www/plainmotif
+    echo ">>> Cloning repos"
+    git clone https://github.com/mizzenlite/skeleton.git /home/vagrant/www/mizzenlite/mizzenlite -o gh
+    git clone https://github.com/mizzenlite/skeleton.git /home/vagrant/www/mizzenlite/site -o gh
+    git clone https://github.com/mizzenlite/skeleton.git /home/vagrant/www/mizzenlite/skeleton -o gh
+    git clone https://github.com/mizzenlite/core.git /home/vagrant/www/mizzenlite/core -o gh
+    
+    cd /home/vagrant/www/mizzenlite/mizzenlite
+    cp /home/vagrant/www/mizzenlite/mizzenlite/config/config.json.sample /home/vagrant/www/mizzenlite/mizzenlite/config/config.json
+    /home/vagrant/bin/composer install
+    mv vendor/strayobject/mizzenlite vendor/strayobject/mizzenlite_orig
+    ln -s /home/vagrant/www/mizzenlite/core/src vendor/strayobject/mizzenlite
+    
+    cd /home/vagrant/www/mizzenlite/site
+    cp /home/vagrant/www/mizzenlite/site/config/config.json.sample /home/vagrant/www/mizzenlite/site/config/config.json
+    /home/vagrant/bin/composer install
+
+else
+    cd /home/vagrant/www/mizzenlite/core
+    git pull gh master
+    cd /home/vagrant/www/mizzenlite/site
+    git pull gh master
+    cd /home/vagrant/www/mizzenlite/skeleton
+    git pull gh master
+    cd /home/vagrant/www/mizzenlite/mizzzenlite
+    
+    rm vendor/strayobject/mizzenlite
+    /home/vagrant/bin/composer update
+    ln -s /home/vagrant/www/mizzenlite/core/src vendor/strayobject/mizzenlite
 fi
 
-sudo a2dissite 000-default
-sudo rm -rf /var/www
-sudo ln -s /home/vagrant/www /var/www
-#sudo setfacl -m u:www-data:rwx /var/www
 
-sudo a2enmod rewrite
+sudo a2ensite mizzenlitetest
 sudo a2ensite mizzenlite
-sudo a2ensite plainmotif 
-sudo a2ensite glasgowphp
 
 sudo service apache2 restart

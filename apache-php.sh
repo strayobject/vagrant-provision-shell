@@ -4,7 +4,7 @@ echo ">>> Starting Install Script"
  
 # Update
 sudo apt-get update
-sudo apt-get upgrade
+sudo apt-get upgrade -y
  
 echo ">>> Installing Base Items"
  
@@ -26,5 +26,9 @@ sudo apt-get install -y curl php5 apache2 libapache2-mod-php5 php5-curl php5-gd 
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
 sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/apache2/php.ini
  
-sudo service apache2 restart
+sudo a2dissite 000-default
+sudo rm -rf /var/www
+sudo ln -s /home/vagrant/www /var/www
+sudo a2enmod rewrite
 
+sudo service apache2 restart
