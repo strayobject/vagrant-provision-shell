@@ -25,8 +25,10 @@ then
     mkdir /home/vagrant/www/plainmotif
     
     echo ">>> Cloning repos"
-    git clone https://github.com/mizzenlite/skeleton /home/vagrant/www/plainmotif -o gh
+    git clone https://github.com/plainmotif/site /home/vagrant/www/plainmotif -o gh
     cd /home/vagrant/www/plainmotif
+    git remote rm gh
+    git remote add gh git@github.com:plainmotif/site.git
     /home/vagrant/bin/composer install
     cp /home/vagrant/www/plainmotif/config/config.json.sample /home/vagrant/www/plainmotif/config/config.json
     sudo chmod 0777 /home/vagrant/www/plainmotif/var

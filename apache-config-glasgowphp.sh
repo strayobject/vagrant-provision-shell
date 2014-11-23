@@ -24,8 +24,10 @@ then
     mkdir /home/vagrant/www/glasgowphp
 
     echo ">>> Cloning repos"
-    git clone https://github.com/strayobject/glasgowphp /home/vagrant/www/glasgowphp -o gh
+    git clone https://github.com/glasgowphp/site /home/vagrant/www/glasgowphp -o gh
     cd /home/vagrant/www/glasgowphp
+    git remote rm gh
+    git remote add gh git@github.com:glasgowphp/site.git
     /home/vagrant/bin/composer install
     git submodule init && git submodule update
     cp /home/vagrant/www/glasgowphp/config/config.json.sample /home/vagrant/www/glasgowphp/config/config.json
@@ -36,6 +38,8 @@ else
     cd /home/vagrant/www/glasgowphp
     git pull gh master
     /home/vagrant/bin/composer update
+    cd content 
+    git pull gh master
 fi
 
 sudo a2ensite glasgowphp
