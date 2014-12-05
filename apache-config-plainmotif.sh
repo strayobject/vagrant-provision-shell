@@ -29,14 +29,14 @@ then
     cd /home/vagrant/www/plainmotif
     git remote rm gh
     git remote add gh git@github.com:plainmotif/site.git
-    /home/vagrant/bin/composer install
+    /home/vagrant/bin/composer install -n
     cp /home/vagrant/www/plainmotif/config/config.json.sample /home/vagrant/www/plainmotif/config/config.json
     sudo chmod 0777 /home/vagrant/www/plainmotif/var
 
 else
     cd /home/vagrant/www/plainmotif
     git pull gh master
-    /home/vagrant/bin/composer update
+    /home/vagrant/bin/composer update -n
 fi
 
 sudo a2ensite plainmotif 

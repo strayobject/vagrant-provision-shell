@@ -28,7 +28,7 @@ then
     cd /home/vagrant/www/glasgowphp
     git remote rm gh
     git remote add gh git@github.com:glasgowphp/site.git
-    /home/vagrant/bin/composer install
+    /home/vagrant/bin/composer install -n
     git submodule init && git submodule update
     cp /home/vagrant/www/glasgowphp/config/config.json.sample /home/vagrant/www/glasgowphp/config/config.json
     sudo chmod 0777 /home/vagrant/www/glasgowphp/var
@@ -37,9 +37,9 @@ then
 else
     cd /home/vagrant/www/glasgowphp
     git pull gh master
-    /home/vagrant/bin/composer update
+    /home/vagrant/bin/composer update -n
     cd content 
-    git pull gh master
+    git pull origin master
 fi
 
 sudo a2ensite glasgowphp

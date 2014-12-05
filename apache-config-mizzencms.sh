@@ -50,14 +50,14 @@ then
     cp /home/vagrant/www/mizzencms/mcmstest/config/config.json.sample /home/vagrant/www/mizzencms/mcmstest/config/config.json
     git remote rm gh
     git remote add gh git@github.com:mizzencms/skeleton.git
-    /home/vagrant/bin/composer install
-    mv vendor/strayobject/mizzencms vendor/strayobject/mizzencms_orig
-    ln -s /home/vagrant/www/mizzencms/core/src vendor/strayobject/mizzencms
+    /home/vagrant/bin/composer install -n
+    mv vendor/mizzencms/core vendor//mizzencms/core_orig
+    ln -s /home/vagrant/www/mizzencms/core vendor/mizzencms/core
 else
     cd /home/vagrant/www/mizzencms/mcmstest    
     rm vendor/strayobject/mizzencms
-    /home/vagrant/bin/composer update
-    ln -s /home/vagrant/www/mizzencms/core/src vendor/strayobject/mizzencms
+    /home/vagrant/bin/composer update -n
+    ln -s /home/vagrant/www/mizzencms/core vendor/strayobject/mizzencms
 fi
 if [ ! -d /home/vagrant/www/mizzencms/site ];
 then
@@ -66,10 +66,11 @@ then
     cp /home/vagrant/www/mizzencms/site/config/config.json.sample /home/vagrant/www/mizzencms/site/config/config.json
     git remote rm gh
     git remote add gh git@github.com:mizzencms/site.git
-    /home/vagrant/bin/composer install
+    /home/vagrant/bin/composer install -n
 else
     cd /home/vagrant/www/mizzencms/site
     git pull gh master
+    /home/vagrant/bin/composer update -n
 fi
 if [ ! -d /home/vagrant/www/mizzencms/skeleton ];
 then
@@ -78,21 +79,23 @@ then
     cp /home/vagrant/www/mizzencms/skeleton/config/config.json.sample /home/vagrant/www/mizzencms/skeleton/config/config.json
     git remote rm gh
     git remote add gh git@github.com:mizzencms/skeleton.git
-    /home/vagrant/bin/composer install
+    /home/vagrant/bin/composer install -n
 else
     cd /home/vagrant/www/mizzencms/skeleton
     git pull gh master
+    /home/vagrant/bin/composer update -n
 fi
 if [ ! -d /home/vagrant/www/mizzencms/core ];
 then
     git clone https://github.com/mizzencms/core.git /home/vagrant/www/mizzencms/core -o gh
-    cd /home/vagrant/www/mizzzencms/core
+    cd /home/vagrant/www/mizzencms/core
     git remote rm gh
     git remote add gh git@github.com:mizzencms/core.git
-    /home/vagrant/bin/composer install
+    /home/vagrant/bin/composer install -n
 else
     cd /home/vagrant/www/mizzencms/core
     git pull gh master
+    /home/vagrant/bin/composer update -n
 fi
 
 sudo a2ensite mcmstest
