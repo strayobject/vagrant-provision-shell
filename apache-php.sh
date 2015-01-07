@@ -20,11 +20,12 @@ echo ">>> Adding PPA's and Installing Server Items"
 #sudo apt-get update
  
 # Install the Rest
-sudo apt-get install -y curl php5 apache2 libapache2-mod-php5 php5-curl php5-gd php5-mcrypt
+sudo apt-get install -y curl php5 apache2 libapache2-mod-php5 php5-curl php5-gd php5-mcrypt php5-intl
 
 # PHP Config
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
 sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/apache2/php.ini
+sudo sed -i 's/;date.timezone =/date.timezone = "Europe\/London"/g' /etc/php5/apache2/php.ini
  
 sudo a2dissite 000-default
 sudo rm -rf /var/www
