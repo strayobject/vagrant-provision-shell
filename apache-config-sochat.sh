@@ -19,12 +19,6 @@ then
     mkdir /home/vagrant/www/sochat
 fi
 
-sudo a2dissite 000-default
-sudo rm -rf /var/www
-sudo ln -s /home/vagrant/www /var/www
-#sudo setfacl -m u:www-data:rwx /var/www
-
-sudo a2enmod rewrite
 sudo a2ensite sochat
 
 sudo service apache2 restart
